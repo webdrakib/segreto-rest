@@ -18,14 +18,27 @@
 
 html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    background: var(--ink);
+    background-color: var(--ink);
     color: var(--parchment);
     font-family: 'Jost', sans-serif;
     overflow-x: hidden;
+    /* Security measures */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+/* Prevent image dragging */
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
 }
 
 ::selection {

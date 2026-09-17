@@ -1381,4 +1381,68 @@
         if (e.key === 'ArrowRight') nextSlide();
     });
 
+    /* ================= SECURITY / ANTI-COPY MEASURES ================= */
+    // Disable Right Click
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showToast("Right-click is disabled.");
+    });
+
+    // Disable common developer tools keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // F12
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+I (Inspect)
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+J (Console)
+        if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+C (Element Inspector)
+        if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+U (View Source)
+        if (e.ctrlKey && e.key === 'u') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+S (Save Page)
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+P (Print)
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+C (Copy) - Optional, can be annoying for users wanting to copy text like address, but requested by user
+        if (e.ctrlKey && e.key === 'c') {
+            e.preventDefault();
+            showToast("Copying is disabled.");
+            return false;
+        }
+    });
+
+    // Prevent text selection (fallback for CSS)
+    document.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Prevent drag and drop of images
+    document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName.toLowerCase() === 'img') {
+            e.preventDefault();
+        }
+    });
+
 })();
