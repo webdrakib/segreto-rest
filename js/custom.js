@@ -19,7 +19,7 @@
             }
         });
     }
-    splitTextIntoChars(document, 0.8);
+    splitTextIntoChars(document, 0.25);
 
     /* ================= HERO LINE DRAW ================= */
     function animateHeroLine() {
@@ -112,12 +112,29 @@
 
     /* ================= PAGE LOADER ================= */
     var loader = document.getElementById('page-loader');
-    window.addEventListener('load', function () {
+    function hideLoader() {
+        if (!loader || loader.classList.contains('loaded')) return;
+        loader.classList.add('loaded');
+        document.body.style.overflow = '';
         setTimeout(function () {
-            loader.classList.add('loaded');
-            document.body.style.overflow = '';
-        }, 1800);
-    });
+            if (loader) loader.style.display = 'none';
+        }, 400);
+        if (typeof wow !== 'undefined' && wow && typeof wow.sync === 'function') {
+            wow.sync();
+        }
+    }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(hideLoader, 200);
+    } else {
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(hideLoader, 200);
+        });
+        window.addEventListener('load', function () {
+            hideLoader();
+        });
+        // Safety timeout so page never gets stuck on preloader
+        setTimeout(hideLoader, 1000);
+    }
 
     /* ================= SCROLL PROGRESS ================= */
     var progressBar = document.getElementById('scroll-progress');
@@ -212,7 +229,51 @@
         });
     });
 
-    /* ================= SCROLL ANIMATIONS ================= */
+    /* ================= WOW.JS SCROLL ANIMATIONS ================= */
+    var wow;
+    if (typeof WOW === 'function') {
+        wow = new WOW({
+            boxClass: 'wow',
+            animateClass: 'animated',
+            offset: 50,
+            mobile: true,
+            live: false,
+            callback: function (box) {
+                box.setAttribute('data-wow-animated', 'true');
+            }
+        });
+        wow.init();
+    }
+
+    /* ================= SCROLL ANIMATION SAFETY OBSERVER ================= */
+    if ('IntersectionObserver' in window) {
+        var wowFallbackObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    var el = entry.target;
+                    if (!el.hasAttribute('data-wow-animated')) {
+                        el.setAttribute('data-wow-animated', 'true');
+                        el.style.visibility = 'visible';
+                        if (!el.classList.contains('animated')) {
+                            el.classList.add('animated');
+                            var cleanEnd = function () {
+                                el.classList.remove('animated');
+                                el.removeEventListener('animationend', cleanEnd);
+                            };
+                            el.addEventListener('animationend', cleanEnd);
+                        }
+                    }
+                    wowFallbackObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+        document.querySelectorAll('.wow').forEach(function (el) {
+            wowFallbackObserver.observe(el);
+        });
+    }
+
+    /* ================= FADE UP FALLBACK OBSERVER ================= */
     var fadeObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {

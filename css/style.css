@@ -18,6 +18,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -42,12 +43,20 @@ select:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-    *:not(.marquee-track):not(.marquee):not(.marquee-item):not(.showcase-track):not(.showcase-track *) {
+    *:not(.marquee-track):not(.marquee):not(.marquee-item):not(.showcase-track):not(.showcase-track *):not(.wow):not(.animated):not(.animated *) {
         animation-duration: 0.001ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
+    }
+
+    .wow,
+    .animated {
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
     }
 }
 
@@ -293,7 +302,8 @@ h2.reveal-line {
 
 /* ================= PAGE LOADER ================= */
 #page-loader {
-    transition: opacity 0.8s ease, visibility 0.8s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    will-change: opacity, visibility;
 }
 
 #page-loader.loaded {
@@ -515,6 +525,7 @@ h2.reveal-line {
     object-position: center !important;
     display: block;
     transform: scale(1.05);
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
 
@@ -831,7 +842,115 @@ h2.reveal-line {
     perspective: 800px;
 }
 
-/* ================= SCROLL ANIMATIONS ================= */
+/* ================= SCROLL ANIMATIONS (WOW.JS) ================= */
+.wow {
+    visibility: hidden;
+}
+
+.animated {
+    -webkit-animation-duration: 0.85s !important;
+    animation-duration: 0.85s !important;
+    -webkit-animation-fill-mode: both !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.animated,
+[data-wow-animated="true"] {
+    visibility: visible !important;
+}
+
+/* Luxury keyframe overrides for tasteful, non-jarring scroll reveal */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 32px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 32px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -32px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -32px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(-32px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(-32px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(32px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(32px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Backward compatibility for fade-up */
 .fade-up {
     opacity: 0;
     transform: translateY(30px);
@@ -1122,6 +1241,7 @@ h2.reveal-line {
 
 /* ================= TESTIMONIALS CAROUSEL ================= */
 .testimonials-track {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
 }
 
