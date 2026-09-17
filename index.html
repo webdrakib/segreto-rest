@@ -39,6 +39,7 @@
     <link rel="apple-touch-icon" href="images/logo.jpg">
 
     <!-- Preload critical assets -->
+    <link rel="preload" href="images/logo.jpg" as="image">
     <link rel="preload" href="images/food.jpg" as="image">
     <link rel="preload" href="images/Chefs Special Ramen.jpg" as="image">
 
@@ -126,13 +127,6 @@
         </button>
     </div>
 
-    <!-- ================= CUSTOM CURSOR ================= -->
-    <div id="cursor-dot"
-        class="fixed w-2 h-2 bg-gold rounded-full pointer-events-none z-[70] mix-blend-difference transition-transform duration-75">
-    </div>
-    <div id="cursor-ring"
-        class="fixed w-8 h-8 border border-gold/50 rounded-full pointer-events-none z-[70] transition-all duration-300 ease-out">
-    </div>
 
     <!-- ================= TOAST NOTIFICATION ================= -->
     <div id="toast"
@@ -143,16 +137,11 @@
 
     <!-- ================= LOADER ================= -->
     <div id="page-loader" class="fixed inset-0 z-[100] bg-ink flex flex-col items-center justify-center">
-        <div class="loader-logo mb-6">
-            <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true">
-                <polygon points="50,4 82,32 50,52" fill="#F4EFE6" class="loader-poly" style="animation-delay:0s" />
-                <polygon points="18,32 50,32 50,52" fill="#F4EFE6" class="loader-poly" style="animation-delay:0.15s" />
-                <polygon points="18,52 50,52 18,72" fill="#F4EFE6" class="loader-poly" style="animation-delay:0.3s" />
-                <polygon points="50,52 82,52 50,72" fill="#F4EFE6" opacity="0.55" class="loader-poly"
-                    style="animation-delay:0.45s" />
-                <polygon points="66,52 90,66 66,72" fill="#C9A24B" class="loader-poly" style="animation-delay:0.6s" />
-            </svg>
+        <div class="loader-logo mb-6 relative">
+            <div class="loader-ring absolute -inset-2.5 rounded-full border border-gold/20 border-t-gold/80"
+                aria-hidden="true"></div>
+            <img src="images/logo.jpg" alt="Segreto"
+                class="w-20 h-20 rounded-full object-cover ring-1 ring-gold/40 shadow-xl shadow-gold/20 relative z-10">
         </div>
         <p class="text-muted text-xs tracking-widest2 mb-4 loader-text">SEGRETO</p>
         <div class="loader-bar w-32 h-[1px] bg-white/10 relative overflow-hidden">
@@ -182,9 +171,9 @@
                         <span id="kitchen-dot" class="w-1.5 h-1.5 rounded-full bg-muted/50"></span>
                         <span id="kitchen-text" class="text-muted">--:--</span>
                     </div>
-                    <a href="#reserve"
-                        class="btn-gold magnetic px-5 py-2.5 rounded-sm font-medium tracking-wide text-xs">Reserve a
-                        table</a>
+                    <a href="#reserve" id="nav-reserve-btn"
+                        class="btn-gold inline-flex items-center justify-center px-5 py-2.5 rounded-sm font-semibold tracking-wider text-xs whitespace-nowrap text-ink"><span>Reserve
+                            a table</span></a>
                 </nav>
                 <button id="menu-toggle" class="md:hidden text-parchment" aria-label="Open menu" aria-expanded="false"
                     aria-controls="mobile-menu">
@@ -204,72 +193,68 @@
                         <span id="kitchen-text-mob" class="text-xs text-muted">Loading...</span>
                     </div>
                     <a href="#reserve"
-                        class="mobile-link btn-gold inline-block w-fit px-5 py-2.5 rounded-sm text-ink font-medium">Reserve
-                        a table</a>
+                        class="mobile-link btn-gold inline-flex items-center justify-center w-fit px-5 py-2.5 rounded-sm text-ink font-semibold text-xs whitespace-nowrap"><span>Reserve
+                            a table</span></a>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- ================= HERO ================= -->
-    <section id="top" class="relative min-h-screen flex items-center overflow-hidden" style="padding-top:32px;">
-        <div id="hero-carousel" class="hero-carousel absolute inset-0" aria-label="Food gallery">
-            <div class="hero-slide active" data-caption="Wood-fired &amp; flame-kissed"><img src="images/food.jpg"
-                    alt="Signature dish" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Japanese artistry, perfected"><img
-                    src="images/Chefs Special Ramen.jpg" alt="Chef's Special Ramen" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Fresh from the sea"><img src="images/shushi.jpg" alt="Sushi platter"
-                    class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Handcrafted with soul"><img src="images/Dumpling.jpg"
-                    alt="Artisan dumplings" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Golden perfection"><img src="images/Fried Calamari.jpg"
-                    alt="Fried calamari" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Grand sharing platters"><img src="images/rice plater.jpg"
-                    alt="Rice platter" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="East meets West, beautifully"><img
-                    src="images/Chicken Tacos Sushi.jpg" alt="Chicken Tacos Sushi" class="hero-slide-img"></div>
-            <div class="hero-slide" data-caption="Broths that warm the soul"><img src="images/Chefs Special Udon.jpg"
-                    alt="Chef's Special Udon" class="hero-slide-img"></div>
+    <section id="top" class="relative min-h-screen w-full flex items-center overflow-hidden">
+        <div id="hero-carousel" class="hero-carousel absolute inset-0 w-full h-full" aria-label="Food gallery">
+            <div class="hero-slide active"
+                data-title='<span class="split-text" data-text="A secret worth">A secret worth</span><br><span class="split-text" data-text="keeping ">keeping </span><span class="italic text-goldsoft split-text" data-text="between courses.">between courses.</span>'
+                data-desc="Segreto pairs classic European technique with a modern, well-travelled table — wood-fired mains, slow-built ragùs, and a room lit for conversation rather than photographs.">
+                <img src="images/food.jpg" alt="Signature dish" class="hero-slide-img">
+            </div>
+            <!-- <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Japanese artistry,">Japanese artistry,</span><br><span class="split-text" data-text="perfected ">perfected </span><span class="italic text-goldsoft split-text" data-text="in every bowl.">in every bowl.</span>'
+                data-desc="Slow-simmered rich broths infused with umami, handcrafted spring noodles, tender chashu cuts, and delicate ajitsuke eggs crafted with time-honoured mastery.">
+                <img src="images/Chefs Special Ramen.jpg" alt="Chef's Special Ramen" class="hero-slide-img">
+            </div> -->
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Fresh from the sea,">Fresh from the sea,</span><br><span class="split-text" data-text="crafted ">crafted </span><span class="italic text-goldsoft split-text" data-text="with precision.">with precision.</span>'
+                data-desc="Pristine cuts of Norwegian salmon and sashimi-grade seafood, balanced with seasoned Japanese rice, wasabi, and delicate garnishes.">
+                <img src="images/shushi.jpg" alt="Sushi platter" class="hero-slide-img">
+            </div>
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Handcrafted with soul,">Handcrafted with soul,</span><br><span class="split-text" data-text="folded ">folded </span><span class="italic text-goldsoft split-text" data-text="to perfection.">to perfection.</span>'
+                data-desc="Delicate artisanal dough envelopes packed with spiced prawn and savory fillings, pan-seared to a golden crisp and steamed to juicy tenderness.">
+                <img src="images/Dumpling.jpg" alt="Artisan dumplings" class="hero-slide-img">
+            </div>
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Golden perfection,">Golden perfection,</span><br><span class="split-text" data-text="crisped ">crisped </span><span class="italic text-goldsoft split-text" data-text="to tender bliss.">to tender bliss.</span>'
+                data-desc="Lightly seasoned squid rings flash-fried for that perfect crunch while remaining tender inside, accompanied by lemon and house garlic-tartar dip.">
+                <img src="images/Fried Calamari.jpg" alt="Fried calamari" class="hero-slide-img">
+            </div>
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Grand sharing platters,">Grand sharing platters,</span><br><span class="split-text" data-text="meant ">meant </span><span class="italic text-goldsoft split-text" data-text="for company.">for company.</span>'
+                data-desc="Aromatic saffron-infused basmati layered with tender ember-grilled kebabs, roasted vegetables, and house chutneys made for sharing.">
+                <img src="images/rice plater.jpg" alt="Rice platter" class="hero-slide-img">
+            </div>
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="East meets West,">East meets West,</span><br><span class="split-text" data-text="a bold ">a bold </span><span class="italic text-goldsoft split-text" data-text="fusion crossover.">fusion crossover.</span>'
+                data-desc="Crispy seasoned nori shells loaded with seasoned chicken, sushi rice, avocado salsa, and house spicy mayo for an inventive modern crunch.">
+                <img src="images/Chicken Tacos Sushi.jpg" alt="Chicken Tacos Sushi" class="hero-slide-img">
+            </div>
+            <div class="hero-slide"
+                data-title='<span class="split-text" data-text="Broths that warm">Broths that warm</span><br><span class="split-text" data-text="the soul, ">the soul, </span><span class="italic text-goldsoft split-text" data-text="deep & restorative.">deep & restorative.</span>'
+                data-desc="Thick, chewy wheat udon bathing in a deeply aromatic dashi broth, finished with tempura flakes, seasonal greens, and slow-braised toppings.">
+                <img src="images/Chefs Special Udon.jpg" alt="Chef's Special Udon" class="hero-slide-img">
+            </div>
             <div class="hero-overlay absolute inset-0"></div>
         </div>
-        <button id="hero-prev" type="button" aria-label="Previous slide" class="hero-ctrl hero-ctrl-prev">
-            <i class="fa-solid fa-chevron-left text-lg"></i>
-        </button>
-        <button id="hero-next" type="button" aria-label="Next slide" class="hero-ctrl hero-ctrl-next">
-            <i class="fa-solid fa-chevron-right text-lg"></i>
-        </button>
-        <div id="hero-caption" class="hero-caption"><span
-                class="hero-caption-text text-goldsoft text-xs tracking-widest2"></span></div>
-        <div class="hero-thumb-strip" aria-hidden="true">
-            <div class="hero-thumb active"><img src="images/food.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/Chefs Special Ramen.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/shushi.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/Dumpling.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/Fried Calamari.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/rice plater.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/Chicken Tacos Sushi.jpg" alt=""></div>
-            <div class="hero-thumb"><img src="images/Chefs Special Udon.jpg" alt=""></div>
-        </div>
         <div class="sheen"></div>
-        <div id="particles" class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true"></div>
-        <div class="hidden lg:block absolute right-[-4%] top-1/2 -translate-y-1/2 opacity-90 hero-rise delay-3 geometric-float"
-            aria-hidden="true">
-            <svg width="420" height="420" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="50,4 82,32 50,52" fill="#F4EFE6" opacity="0.9" />
-                <polygon points="18,32 50,32 50,52" fill="#F4EFE6" opacity="0.75" />
-                <polygon points="18,52 50,52 18,72" fill="#F4EFE6" opacity="0.55" />
-                <polygon points="50,52 82,52 50,72" fill="#F4EFE6" opacity="0.3" />
-                <polygon points="66,52 92,66 66,74" fill="#C9A24B" />
-            </svg>
-        </div>
         <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-10 pb-20 w-full">
-            <h1
-                class="hero-rise delay-2 font-display text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[0.95] text-parchment max-w-4xl">
+            <h1 id="hero-title"
+                class="hero-rise delay-2 font-display text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] leading-[0.9] text-parchment max-w-4xl">
                 <span class="split-text" data-text="A secret worth">A secret worth</span><br><span class="split-text"
                     data-text="keeping ">keeping </span><span class="italic text-goldsoft split-text"
                     data-text="between courses.">between courses.</span>
             </h1>
-            <p class="hero-rise delay-3 mt-8 max-w-xl text-muted text-base md:text-lg leading-relaxed">Segreto pairs
+            <p id="hero-desc" class="hero-rise delay-3 mt-8 max-w-xl text-muted text-base md:text-lg leading-relaxed">
+                Segreto pairs
                 classic European technique with a modern, well-travelled table — wood-fired mains, slow-built ragùs, and
                 a room lit for conversation rather than photographs.</p>
             <div class="hero-rise delay-4 mt-10 flex flex-wrap items-center gap-5">
@@ -363,11 +348,11 @@
         <div class="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-12 md:gap-20 items-center relative">
             <div class="md:col-span-5 fade-up">
                 <p class="text-goldsoft text-xs tracking-widest2 mb-5">The concept</p>
-                <h2 class="font-display text-4xl md:text-5xl lg:text-6xl leading-tight text-parchment reveal-line">
-                    European gastronomy, told with a Dhaka accent.</h2>
+                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-5xl leading-[1.1] text-parchment">
+                    European gastronomy,<br>told with a Dhaka accent.</h2>
                 <div class="reveal-line-wrap mt-8 flex items-center gap-4">
                     <div class="reveal-line w-12 h-[1px] bg-gold/50"></div><span
-                        class="text-goldsoft text-xs tracking-widest2">SINCE 2013</span>
+                        class="text-goldsoft text-xs tracking-widest2">SINCE 2022</span>
                 </div>
             </div>
             <div class="md:col-span-7 fade-up">
